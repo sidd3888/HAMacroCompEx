@@ -4,7 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[hidelinks, urlcolor=blue]{hyperref}
+\usepackage[hidelinks, colorlinks=True, urlcolor=blue, linkcolor=black]{hyperref}
 \usepackage[a4paper, margin=1in]{geometry}
 \usepackage{math}
 % \usepackage{newtx}
@@ -18,7 +18,7 @@
 \linespread{1.1}
 
 \title{
-    Monetary and Fiscal Policy Regime Changes\\
+    Monetary and Fiscal Policy Regime Changes\footnote{Code available at \href{https://github.com/sidd3888/HAMacroCompEx}{\texttt{https://github.com/sidd3888/HAMacroCompEx}}}\\
     \Large ECON-33540: Macroeconomics with Heterogeneous Households
 }
 \author{Siddarth Venkatesh}
@@ -111,7 +111,7 @@ The second type of equilibrium is an imperfect foresight equilibrium. Here, agen
 
 \subsection{Computation}
 
-The logic of the computation closely follows the manner in which the two types of equilibria were defined. For the perfect foresight equilibrium, note that the consumer problem is still solved by backward iteration of the HJB, with the evolution of the distribution governed by the corresponding KFE that can be solved using forward iteration. The only difference is that given a guess for the path of inflation and output, the path of interest rates and government debt, surplus, and therefore lump-sum transfers to the consumers are now determined by time varying monetary and fiscal policy rules. When solving for government debt, I use the direction of iteration implied by the feedback rule after the regime change (though in the analysis that follows, all parameterizations imply backward iteration).
+The logic of the computation closely follows the manner in which the two types of equilibria were defined.\footnote{While the algorithm is mine, I acknowledge the aid of LLMs in implementing it.} For the perfect foresight equilibrium, note that the consumer problem is still solved by backward iteration of the HJB, with the evolution of the distribution governed by the corresponding KFE that can be solved using forward iteration. The only difference is that given a guess for the path of inflation and output, the path of interest rates and government debt, surplus, and therefore lump-sum transfers to the consumers are now determined by time varying monetary and fiscal policy rules. When solving for government debt, I use the direction of iteration implied by the feedback rule after the regime change (though in the analysis that follows, all parameterizations imply backward iteration).
 
 For the imperfect foresight equilibrium, the computation is split into two pieces. Since the monetary and fiscal policy rules are instantaneous and only take into account the current level of inflation and government debt, the equilibrium path before the regime change is the same as the one in the absence of a regime change. Hence, I solve for the transition path for the standard model without a regime change, which yields a sequence of aggregate variables and distributions. Then, solving for the second segment also involves using the same algorithm to solve for transition paths, but with the initial condition being determined by the distribution at time $T_0$ rather than the stationary distribution. Then, like previously, we can compute the second half of the equilibrium path using the new monetary and fiscal policy rules. The algorithm allows for the possibility of a jump in control variables at $T_0$, thus requiring two guess values for inflation at $T_0$. As a result, we can implement an additional market clearing condition requiring the government debt calculated from the first half of the equilibrium path to be equal to the government debt calculated from the second half of the equilibrium path at $T_0$.
 
